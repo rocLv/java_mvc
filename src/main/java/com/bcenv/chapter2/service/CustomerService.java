@@ -14,34 +14,11 @@ public class CustomerService {
     private static final Logger LOGGER= LoggerFactory.getLogger(DatabaseHelper.class);
 
     public List<Customer> getCustomerList() {
-        List<Customer> customersList=new ArrayList<Customer>();
-        Connection conn = null;
-
-        try {
-            String sql="SELECT * FROM customer";
-            conn = DatabaseHelper.getConnection();
-
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs=stmt.executeQuery();
-            while (rs.next()) {
-                Customer customer=new Customer();
-                customer.setId(rs.getLong("id"));
-                customer.setName(rs.getString("name"));
-                customer.setContact(rs.getString("contact"));
-                customer.setTelephone(rs.getString("telephone"));
-                customer.setEmail(rs.getString("email"));
-                customer.setRemark(rs.getString("remark"));
-                customersList.add(customer);
-            }
 
 
-        } catch (SQLException e) {
-            LOGGER.error("execute sql failure", e);
-        } finally {
-            DatabaseHelper.closeConnection(conn);
-        }
+       String sql = "SELECT * FROM customer";
+       return DatabaseHelper.queryEntityList(Customer.class, sql);
 
-        return customersList;
     }
 
     public Customer getCustomer(long id) {
@@ -57,14 +34,14 @@ public class CustomerService {
     }
 
     public boolean createCustomer(Map<String, Object> fieldMap) {
-        return  false;
+        return  DatabaseHelper.insertEntity(Customer.class, fieldMap);
     }
 
     public boolean updateCustomer(long id, Map<String, Object> fieldMap) {
-        return  false;
+        return  DatabaseHelper.updateEntity(Customer.class, id, fieldMap);
     }
 
     public boolean deleteCustomer(long id) {
-        return false;
+        return DatabaseHelper.deleteEntity(Customer.class, id);
     }
 }
